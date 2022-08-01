@@ -12,7 +12,7 @@
   {{ alert }}
 </div>
     {% endif %}
-    <form action="{% url 'create' %}" method="post">
+    <form action="{% url 'edit' TITLE=form.title %}" method="post">
         {% csrf_token %}
     <div class="form-group">
         <label for="{{ form.title.id_for_label }}">{{ form.title.label }}:</label>

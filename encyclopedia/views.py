@@ -89,6 +89,25 @@ def create(request):
 def edit(request, TITLE):
     content = util.get_entry(TITLE)
 
+    if request.method == "POST":
+        # Take in the data the user submitted and save it as form
+        form = NewEntryForm(request.POST)
+        print('save pressed', form.is_valid())
+        # Check if form data is valid (server-side)
+        if form.is_valid():
+            TITLE = form.cleaned_data["title"]
+            body = form.cleaned_data["body"]
+
+            util.save_entry(TITLE, body)
+            return HttpResponseRedirect(reverse("entry", kwargs={'TITLE': TITLE}))
+
+        else:
+
+            # If the form is invalid, re-render the page with existing information.
+            return render(request, "encyclopedia/edit-entry.html", {
+                "form": form
+            })
+
     return render(request, "encyclopedia/edit-entry.html", {
         "form": NewEntryForm(initial={'title': TITLE, 'body': content})
     })
