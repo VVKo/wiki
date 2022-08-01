@@ -13,6 +13,12 @@ class NewEntryForm(forms.Form):
     body = forms.CharField(label="Text", widget=forms.Textarea(attrs={'class': 'form-control'}))
 
 
+class EditEntryForm(forms.Form):
+    title = forms.CharField(label="Title",
+                            widget=forms.TextInput(attrs={'class': 'form-control', 'readonly': 'readonly'}))
+    body = forms.CharField(label="Text", widget=forms.Textarea(attrs={'class': 'form-control'}))
+
+
 def index(request):
     return render(request, "encyclopedia/index.html", {
         "entries": util.list_entries()
@@ -91,15 +97,17 @@ def edit(request, TITLE):
 
     if request.method == "POST":
         # Take in the data the user submitted and save it as form
-        form = NewEntryForm(request.POST)
-        print('save pressed', form.is_valid())
+        form = EditEntryForm(request.POST)
         # Check if form data is valid (server-side)
         if form.is_valid():
             TITLE = form.cleaned_data["title"]
             body = form.cleaned_data["body"]
 
             util.save_entry(TITLE, body)
-            return HttpResponseRedirect(reverse("entry", kwargs={'TITLE': TITLE}))
+            return render(request, "encyclopedia/entry.html", {
+                "entry": markdown2.markdown(util.get_entry(TITLE)),
+                "title": TITLE
+            })
 
         else:
 
@@ -109,5 +117,5 @@ def edit(request, TITLE):
             })
 
     return render(request, "encyclopedia/edit-entry.html", {
-        "form": NewEntryForm(initial={'title': TITLE, 'body': content})
+        "form": EditEntryForm(initial={'title': TITLE, 'body': content})
     })
