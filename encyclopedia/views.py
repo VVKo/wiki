@@ -1,4 +1,6 @@
-from django.shortcuts import render
+import random
+
+from django.shortcuts import render, redirect
 from django.http import Http404, HttpResponseRedirect
 from django.urls import reverse
 from django import forms
@@ -119,3 +121,14 @@ def edit(request, TITLE):
     return render(request, "encyclopedia/edit-entry.html", {
         "form": EditEntryForm(initial={'title': TITLE, 'body': content})
     })
+
+
+def random_entry(request):
+    title = random.choice(util.list_entries())
+
+    # return render(request, "encyclopedia/entry.html", {
+    #     "entry": markdown2.markdown(util.get_entry(title)),
+    #     "title": title
+    # })
+
+    return redirect('entry', TITLE=title)
