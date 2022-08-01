@@ -1,0 +1,34 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+    Edit Entry
+{% endblock %}
+
+{% block body %}
+
+    <h1>Edit Entry</h1>
+{% if alert %}
+    <div class="alert alert-danger" role="alert">
+  {{ alert }}
+</div>
+    {% endif %}
+    <form action="{% url 'create' %}" method="post">
+        {% csrf_token %}
+    <div class="form-group">
+        <label for="{{ form.title.id_for_label }}">{{ form.title.label }}:</label>
+
+        {{ form.title }}
+    </div>
+        <div class="form-group">
+        <label for="{{ form.body.id_for_label }}">
+            {{ form.body.label }}:
+        </label>
+
+      {{ form.body }}
+
+        </div>
+        <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+
+{% endblock %}
+

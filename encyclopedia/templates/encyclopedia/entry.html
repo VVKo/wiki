@@ -11,3 +11,7 @@
 
 
 {% endblock %}
+
+{% block nav %}
+    <button class="btn btn-secondary" onclick="location.href='{% url 'edit' TITLE=title %}'">Edit</button>
+{% endblock %}
